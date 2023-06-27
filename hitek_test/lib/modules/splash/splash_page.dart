@@ -2,8 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hitek_test/common/theme/app_color.dart';
+import 'package:hitek_test/widgets/app_logo.dart';
 
-import '../../utils/image_path.dart';
+
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -19,13 +21,6 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-
-    Timer(
-      const Duration(seconds: 4),
-      () {
-        Navigator.pushReplacementNamed(context, '/login');
-      },
-    );
   }
 
   @override
@@ -49,6 +44,10 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
 
     Future.delayed(const Duration(milliseconds: 3000), () {
       _animationController.forward();
+    }).then((value) {
+      Future.delayed(const Duration(milliseconds: 1000), () {
+        Navigator.pushReplacementNamed(context, '/login');
+      });
     });
   }
 
@@ -57,29 +56,22 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        systemOverlayStyle: SystemUiOverlayStyle.dark,
-        backgroundColor: Colors.transparent,
+        backgroundColor: AppColor.TRANSPARENT,
+        systemOverlayStyle: const SystemUiOverlayStyle(
+          statusBarIconBrightness: Brightness.dark,
+          statusBarColor: AppColor.TRANSPARENT,
+        ),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           SizedBox(
             height: _animation.value,
-          ),
-          SizedBox(
             width: MediaQuery.of(context).size.width,
-            child: _appLogo(),
-          )
+          ),
+          const AppLogo(),
         ],
       ),
-    );
-  }
-
-  Image _appLogo() {
-    return Image.asset(
-      ImagePaths.app_logo,
-      width: 156.0,
-      height: 64.0,
     );
   }
 }
