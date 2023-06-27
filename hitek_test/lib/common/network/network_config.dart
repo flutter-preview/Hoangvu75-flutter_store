@@ -50,39 +50,44 @@ class NetworkConfig {
     }
   }
 
+  static bool isDialogShowed = false;
   void showAlertDialog(BuildContext context) {
-    showDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Network error'),
-          content: const Text(
-            "Cannot access to the internet. Please try again.",
-            style: TextStyle(
-              fontSize: 16.0,
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              style: TextButton.styleFrom(
-                textStyle: Theme.of(context).textTheme.labelLarge,
+    if (!isDialogShowed) {
+      showDialog<void>(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Network error'),
+            content: const Text(
+              "Cannot access to the internet. Please try again.",
+              style: TextStyle(
+                fontSize: 16.0,
               ),
-              child: const Text(
-                'Confirm',
-                style: TextStyle(
-                  fontSize: 16.0,
+            ),
+            actions: <Widget>[
+              TextButton(
+                style: TextButton.styleFrom(
+                  textStyle: Theme.of(context).textTheme.labelLarge,
                 ),
+                child: const Text(
+                  'Confirm',
+                  style: TextStyle(
+                    fontSize: 16.0,
+                  ),
+                ),
+                onPressed: () {
+                  isDialogShowed = false;
+                  Navigator.of(context).pop();
+                  if (isInternetAvailable.value == false) {
+                    showAlertDialog(context);
+                  }
+                },
               ),
-              onPressed: () {
-                Navigator.of(context).pop();
-                if (isInternetAvailable.value == false) {
-                  showAlertDialog(context);
-                }
-              },
-            ),
-          ],
-        );
-      },
-    );
+            ],
+          );
+        },
+      );
+    }
+    isDialogShowed = true;
   }
 }
