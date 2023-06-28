@@ -12,4 +12,6 @@ class AppColor {
   static const DEFAULT_GREY = Colors.grey;
   static const DEFAULT_WHITE = Colors.white;
   static const DEFAULT_BLACK = Colors.black;
+  static const APP_BAR_START = Color(0xFF84DAE8);
+  static const APP_BAR_END = Color(0xFFBFF8EE);
 }

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hitek_test/common/theme/app_color.dart';
+import 'package:hitek_test/modules/base/base_page.dart';
 import 'package:hitek_test/widgets/app_logo.dart';
 
 class SplashPage extends StatefulWidget {
@@ -29,6 +30,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
       duration: const Duration(milliseconds: 500),
       vsync: this,
     );
+
     _animation = Tween<double>(
       begin: MediaQuery.of(context).size.height / 2 - MediaQuery.of(context).viewPadding.top,
       end: 129.0,
@@ -37,8 +39,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
         parent: _animationController,
         curve: Curves.easeInOut,
       ),
-    );
-    _animation.addListener(() => setState(() {}));
+    )..addListener(() => setState(() {}));
 
     Future.delayed(const Duration(milliseconds: 3000), () {
       _animationController.forward();

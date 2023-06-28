@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hitek_test/common/network/network_config.dart';
 
-import '../../common/config/app_constants.dart';
+import '../../common/theme/app_color.dart';
+
 
 class BasePage extends StatefulWidget {
   const BasePage({super.key});
@@ -23,9 +25,33 @@ class BaseStatePage<T extends BasePage> extends State<T> with AutomaticKeepAlive
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _setStatusBarTheme();
+  }
+
+  @override
   void dispose() {
     super.dispose();
     NetworkConfig.networkConfig.dispose();
+  }
+
+  static const systemUIOverlayDark = SystemUiOverlayStyle(
+    statusBarIconBrightness: Brightness.light,
+    statusBarColor: AppColor.TRANSPARENT,
+  );
+
+  static const systemUIOverlayLight = SystemUiOverlayStyle(
+    statusBarIconBrightness: Brightness.dark,
+    statusBarColor: AppColor.TRANSPARENT,
+  );
+
+  void _setStatusBarTheme() {
+    if (isDarkMode()) {
+      SystemChrome.setSystemUIOverlayStyle(systemUIOverlayDark);
+    } else {
+      SystemChrome.setSystemUIOverlayStyle(systemUIOverlayLight);
+    }
   }
 
   bool isDarkMode() {

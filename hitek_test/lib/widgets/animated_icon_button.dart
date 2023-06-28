@@ -62,6 +62,8 @@ class _AnimatedIconButtonState extends State<AnimatedIconButton> with SingleTick
         });
       }
     });
+
+    _textLabel = const Text("");
   }
 
   @override

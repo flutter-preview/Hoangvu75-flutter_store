@@ -36,15 +36,6 @@ class _LoginPageState extends BaseStatePage<LoginPage> {
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
         extendBodyBehindAppBar: true,
-        appBar: AppBar(
-          backgroundColor: AppColor.TRANSPARENT,
-          systemOverlayStyle: SystemUiOverlayStyle(
-            statusBarIconBrightness: (MediaQuery.of(context).platformBrightness == Brightness.dark)
-                ? Brightness.light
-                : Brightness.dark,
-            statusBarColor: AppColor.TRANSPARENT,
-          ),
-        ),
         body: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
