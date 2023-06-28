@@ -5,8 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:hitek_test/common/theme/app_color.dart';
 import 'package:hitek_test/widgets/app_logo.dart';
 
-
-
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
 
@@ -57,8 +55,10 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         backgroundColor: AppColor.TRANSPARENT,
-        systemOverlayStyle: const SystemUiOverlayStyle(
-          statusBarIconBrightness: Brightness.dark,
+        systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarIconBrightness: (MediaQuery.of(context).platformBrightness == Brightness.dark)
+              ? Brightness.light
+              : Brightness.dark,
           statusBarColor: AppColor.TRANSPARENT,
         ),
       ),

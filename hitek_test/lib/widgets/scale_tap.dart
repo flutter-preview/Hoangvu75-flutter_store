@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
 class ScaleTap extends StatefulWidget {
-  const ScaleTap({super.key, required this.child, this.scale = 0.9});
+  const ScaleTap({super.key, required this.child, this.scale = 0.9, this.onTap});
   final Widget child;
   final double scale;
+  final Function? onTap;
 
   @override
   State<ScaleTap> createState() => _ScaleTapState();
@@ -32,6 +33,7 @@ class _ScaleTapState extends State<ScaleTap> with TickerProviderStateMixin {
 
     return GestureDetector(
       onTap: () {
+        widget.onTap!();
         _controller.forward();
         Future.delayed(const Duration(milliseconds: 100), () {
           _controller.reverse();

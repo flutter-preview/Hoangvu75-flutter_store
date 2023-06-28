@@ -8,6 +8,8 @@ class AppColor {
   static const TRANSPARENT = Colors.transparent;
   static const BUTTON_BLUE = Color(0xFF547DBF);
   static const DEFAULT_BLUE = Colors.blueAccent;
+  static const DEFAULT_RED = Colors.redAccent;
   static const DEFAULT_GREY = Colors.grey;
   static const DEFAULT_WHITE = Colors.white;
+  static const DEFAULT_BLACK = Colors.black;
 }

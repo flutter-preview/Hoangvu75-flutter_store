@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hitek_test/common/network/network_config.dart';
 
+import '../../common/config/app_constants.dart';
+
 class BasePage extends StatefulWidget {
   const BasePage({super.key});
 
@@ -9,7 +11,6 @@ class BasePage extends StatefulWidget {
 }
 
 class BaseStatePage<T extends BasePage> extends State<T> with AutomaticKeepAliveClientMixin<T> {
-  late NetworkConfig networkConfig;
 
   @override
   bool get wantKeepAlive => true;
@@ -17,12 +18,17 @@ class BaseStatePage<T extends BasePage> extends State<T> with AutomaticKeepAlive
   @override
   void initState() {
     super.initState();
-    networkConfig = NetworkConfig(context);
-    networkConfig.handleNativeMethodCall(context);
+    NetworkConfig.networkConfig = NetworkConfig(context);
+    NetworkConfig.networkConfig.handleNativeMethodCall(context);
   }
 
   @override
   void dispose() {
     super.dispose();
+    NetworkConfig.networkConfig.dispose();
+  }
+
+  bool isDarkMode() {
+    return MediaQuery.of(context).platformBrightness == Brightness.dark;
   }
 }

@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hitek_test/common/theme/app_color.dart';
 import 'package:hitek_test/modules/base/base_page.dart';
+import 'package:hitek_test/modules/login/login_controller.dart';
 import 'package:hitek_test/widgets/app_logo.dart';
-import 'package:hitek_test/widgets/custom_text_field.dart';
+import 'package:hitek_test/widgets/animated_text_field.dart';
 import 'package:hitek_test/widgets/scale_tap.dart';
 
 class LoginPage extends BasePage {
@@ -14,14 +15,18 @@ class LoginPage extends BasePage {
 }
 
 class _LoginPageState extends BaseStatePage<LoginPage> {
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  late final LoginController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = LoginController();
+  }
 
   @override
   void dispose() {
     super.dispose();
-    _emailController.dispose();
-    _passwordController.dispose();
+    controller.dispose();
   }
 
   @override
@@ -33,8 +38,10 @@ class _LoginPageState extends BaseStatePage<LoginPage> {
         extendBodyBehindAppBar: true,
         appBar: AppBar(
           backgroundColor: AppColor.TRANSPARENT,
-          systemOverlayStyle: const SystemUiOverlayStyle(
-            statusBarIconBrightness: Brightness.dark,
+          systemOverlayStyle: SystemUiOverlayStyle(
+            statusBarIconBrightness: (MediaQuery.of(context).platformBrightness == Brightness.dark)
+                ? Brightness.light
+                : Brightness.dark,
             statusBarColor: AppColor.TRANSPARENT,
           ),
         ),
@@ -114,8 +121,50 @@ class _LoginPageState extends BaseStatePage<LoginPage> {
     );
   }
 
+  Container _emailTextField() {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 36.0),
+      child: AnimatedTextField(
+        controller: controller.emailController,
+        isFocusedBorderWidth: 3.0,
+        isUnfocusedBorderWidth: 1.0,
+        isFocusedBorderColor: AppColor.DEFAULT_BLUE,
+        isUnfocusedBorderColor: AppColor.DEFAULT_GREY,
+        borderRadius: BorderRadius.circular(8.0),
+        keyboardType: TextInputType.emailAddress,
+        cursorColor: AppColor.DEFAULT_BLUE,
+        hintText: "Email của bạn",
+        contentPadding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 12.0),
+        textStyle: const TextStyle(fontSize: 16.0),
+      ),
+    );
+  }
+
+  Container _passwordTextField() {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 36.0),
+      child: AnimatedTextField(
+        controller: controller.passwordController,
+        isFocusedBorderWidth: 3.0,
+        isUnfocusedBorderWidth: 1.0,
+        isFocusedBorderColor: AppColor.DEFAULT_BLUE,
+        isUnfocusedBorderColor: AppColor.DEFAULT_GREY,
+        borderRadius: BorderRadius.circular(8.0),
+        keyboardType: TextInputType.emailAddress,
+        cursorColor: AppColor.DEFAULT_BLUE,
+        obscureText: true,
+        hintText: "Mật khẩu của bạn",
+        contentPadding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 12.0),
+        textStyle: const TextStyle(fontSize: 16.0),
+      ),
+    );
+  }
+
   ScaleTap _loginButton() {
     return ScaleTap(
+      onTap: () {
+        controller.onLogin();
+      },
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 36.0),
         padding: const EdgeInsets.symmetric(
@@ -138,45 +187,6 @@ class _LoginPageState extends BaseStatePage<LoginPage> {
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Container _passwordTextField() {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 36.0),
-      child: CustomTextField(
-        controller: _passwordController,
-        isFocusedBorderWidth: 3.0,
-        isUnfocusedBorderWidth: 1.0,
-        isFocusedBorderColor: AppColor.DEFAULT_BLUE,
-        isUnfocusedBorderColor: AppColor.DEFAULT_GREY,
-        borderRadius: BorderRadius.circular(8.0),
-        keyboardType: TextInputType.emailAddress,
-        cursorColor: AppColor.DEFAULT_BLUE,
-        obscureText: true,
-        hintText: "Mật khẩu của bạn",
-        contentPadding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 12.0),
-        textStyle: const TextStyle(fontSize: 16.0),
-      ),
-    );
-  }
-
-  Container _emailTextField() {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 36.0),
-      child: CustomTextField(
-        controller: _emailController,
-        isFocusedBorderWidth: 3.0,
-        isUnfocusedBorderWidth: 1.0,
-        isFocusedBorderColor: AppColor.DEFAULT_BLUE,
-        isUnfocusedBorderColor: AppColor.DEFAULT_GREY,
-        borderRadius: BorderRadius.circular(8.0),
-        keyboardType: TextInputType.emailAddress,
-        cursorColor: AppColor.DEFAULT_BLUE,
-        hintText: "Email của bạn",
-        contentPadding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 12.0),
-        textStyle: const TextStyle(fontSize: 16.0),
       ),
     );
   }
