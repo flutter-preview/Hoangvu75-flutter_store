@@ -21,7 +21,6 @@ class AuthRepository extends IAuthRepository {
         "password": password,
       };
 
-      DialogUtils.showLoadingDialog();
       BaseResponse<dynamic> response = await _api.client.login(body);
       await DialogUtils.closeDialog();
       int? code = response.code;

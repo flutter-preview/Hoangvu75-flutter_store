@@ -11,6 +11,9 @@ abstract class RestAPI {
   // Auth
   @POST("/auth/login")
   Future<BaseResponse> login(@Body() Map<String, dynamic> body);
+
+  @GET("/product")
+  Future<BaseResponse> getProduct(@Queries() Map<String, dynamic> queries);
 }
 
 // flutter packages pub run build_runner build --delete-conflicting-outputs

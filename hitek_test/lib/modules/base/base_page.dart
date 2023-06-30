@@ -4,7 +4,6 @@ import 'package:hitek_test/common/network/network_config.dart';
 
 import '../../common/theme/app_color.dart';
 
-
 class BasePage extends StatefulWidget {
   const BasePage({super.key});
 
@@ -13,7 +12,6 @@ class BasePage extends StatefulWidget {
 }
 
 class BaseStatePage<T extends BasePage> extends State<T> with AutomaticKeepAliveClientMixin<T> {
-
   @override
   bool get wantKeepAlive => true;
 
@@ -25,12 +23,6 @@ class BaseStatePage<T extends BasePage> extends State<T> with AutomaticKeepAlive
   }
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _setStatusBarTheme();
-  }
-
-  @override
   void dispose() {
     super.dispose();
     NetworkConfig.networkConfig.dispose();
@@ -38,23 +30,22 @@ class BaseStatePage<T extends BasePage> extends State<T> with AutomaticKeepAlive
 
   static const systemUIOverlayDark = SystemUiOverlayStyle(
     statusBarIconBrightness: Brightness.light,
-    statusBarColor: AppColor.TRANSPARENT,
+    statusBarColor: AppColor.DEFAULT_BLACK,
   );
 
   static const systemUIOverlayLight = SystemUiOverlayStyle(
     statusBarIconBrightness: Brightness.dark,
-    statusBarColor: AppColor.TRANSPARENT,
+    statusBarColor: AppColor.DEFAULT_WHITE,
   );
-
-  void _setStatusBarTheme() {
-    if (isDarkMode()) {
-      SystemChrome.setSystemUIOverlayStyle(systemUIOverlayDark);
-    } else {
-      SystemChrome.setSystemUIOverlayStyle(systemUIOverlayLight);
-    }
-  }
 
   bool isDarkMode() {
     return MediaQuery.of(context).platformBrightness == Brightness.dark;
+  }
+
+  AppBar baseAppBar() {
+    return AppBar(
+      systemOverlayStyle: isDarkMode() ? systemUIOverlayDark : systemUIOverlayLight,
+      toolbarHeight: 0,
+    );
   }
 }

@@ -39,7 +39,7 @@ class LoginController {
     passwordController.dispose();
   }
 
-  onLogin() async {
+  void onLogin() async {
     if (validate()) {
       HashMap<String, dynamic> loginResponse = await login();
       accountService.login(loginResponse);
@@ -51,6 +51,7 @@ class LoginController {
   }
 
   Future<HashMap<String, dynamic>> login() async {
+    DialogUtils.showLoadingDialog();
     final response = await authRepository.login(_email, _password);
     return response;
   }

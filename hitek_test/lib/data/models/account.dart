@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:json_annotation/json_annotation.dart';
 
@@ -10,12 +9,18 @@ class Account {
   String? username;
   String? email;
   String? gender;
+  @JsonKey(name: "json_type")
   String? loginType;
+  @JsonKey(name: "member_type")
   String? memberType;
+  @JsonKey(name: "created_at_unix_time_stamp")
   String? createdAtUnixTimeStamp;
+  @JsonKey(name: "created_at")
   String? createdAt;
-  String? updateAt;
-  String? deleteAt;
+  @JsonKey(name: "updated_at")
+  String? updatedAt;
+  @JsonKey(name: "deleted_at")
+  String? deletedAt;
   String? role;
 
   Account({
@@ -27,8 +32,8 @@ class Account {
     this.memberType,
     this.createdAtUnixTimeStamp,
     this.createdAt,
-    this.updateAt,
-    this.deleteAt,
+    this.updatedAt,
+    this.deletedAt,
     this.role,
   });
 

@@ -15,18 +15,18 @@ class LoginPage extends BasePage {
 }
 
 class _LoginPageState extends BaseStatePage<LoginPage> {
-  late final LoginController controller;
+  late final LoginController _controller;
 
   @override
   void initState() {
     super.initState();
-    controller = LoginController();
+    _controller = LoginController();
   }
 
   @override
   void dispose() {
     super.dispose();
-    controller.dispose();
+    _controller.dispose();
   }
 
   @override
@@ -35,7 +35,7 @@ class _LoginPageState extends BaseStatePage<LoginPage> {
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
-        extendBodyBehindAppBar: true,
+        appBar: baseAppBar(),
         body: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -116,7 +116,7 @@ class _LoginPageState extends BaseStatePage<LoginPage> {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 36.0),
       child: AnimatedTextField(
-        controller: controller.emailController,
+        controller: _controller.emailController,
         isFocusedBorderWidth: 3.0,
         isUnfocusedBorderWidth: 1.0,
         isFocusedBorderColor: AppColor.DEFAULT_BLUE,
@@ -135,7 +135,7 @@ class _LoginPageState extends BaseStatePage<LoginPage> {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 36.0),
       child: AnimatedTextField(
-        controller: controller.passwordController,
+        controller: _controller.passwordController,
         isFocusedBorderWidth: 3.0,
         isUnfocusedBorderWidth: 1.0,
         isFocusedBorderColor: AppColor.DEFAULT_BLUE,
@@ -154,7 +154,7 @@ class _LoginPageState extends BaseStatePage<LoginPage> {
   ScaleTap _loginButton() {
     return ScaleTap(
       onTap: () {
-        controller.onLogin();
+        _controller.onLogin();
       },
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 36.0),
