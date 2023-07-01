@@ -22,10 +22,10 @@ class AnimatedIconButton extends StatefulWidget {
   State<AnimatedIconButton> createState() => _AnimatedIconButtonState();
 }
 
-class _AnimatedIconButtonState extends State<AnimatedIconButton> with SingleTickerProviderStateMixin {
+class _AnimatedIconButtonState extends State<AnimatedIconButton>
+    with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation _animation;
-
   late Widget? _textLabel;
 
   @override
@@ -51,7 +51,10 @@ class _AnimatedIconButtonState extends State<AnimatedIconButton> with SingleTick
       if (value) {
         _textLabel = Text(
           widget.label,
-          style: widget.labelStyle,
+          style: widget.labelStyle!.copyWith(
+            overflow: TextOverflow.fade,
+          ),
+          maxLines: 1,
         );
         _animationController.forward();
       } else {
@@ -89,21 +92,22 @@ class _AnimatedIconButtonState extends State<AnimatedIconButton> with SingleTick
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.max,
               children: [
                 widget.icon,
                 const SizedBox(width: 5),
-                AnimatedOpacity(
-                  opacity: widget.isSelected.value ? 1 : 0,
-                  duration: const Duration(milliseconds: 1000),
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 500),
+                  width: widget.isSelected.value ? 75 : 0,
                   child: AnimatedOpacity(
                     opacity: widget.isSelected.value ? 1 : 0,
-                    duration: const Duration(milliseconds: 500),
+                    duration: const Duration(milliseconds: 1000),
                     child: Transform(
                       transform: Matrix4.translationValues(0, _animation.value, 0),
                       child: _textLabel,
                     ),
                   ),
-                )
+                ),
               ],
             ),
           );
