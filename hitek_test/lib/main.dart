@@ -18,16 +18,22 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         useMaterial3: true,
-        primaryColor: AppColor.DEFAULT_BLUE
+        primaryColor: AppColor.DEFAULT_BLUE,
       ),
       themeMode: ThemeMode.system,
       darkTheme: ThemeData.dark(useMaterial3: true),
       navigatorKey: navigatorKey,
-      initialRoute: '/main',
+      initialRoute: "/main",
       routes: {
         '/s': (context) => const SplashPage(),
         '/login': (context) => const LoginPage(),
         '/main': (context) => const MainPage(),
+      },
+      builder: (context, child) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+          child: child!,
+        );
       },
     );
   }

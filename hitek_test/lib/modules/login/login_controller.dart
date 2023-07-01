@@ -46,13 +46,13 @@ class LoginController {
       if (loginResponse["code"] == 200) {
         Navigator.pushReplacementNamed(navigatorKey.currentContext!, '/main');
       }
-      DialogUtils.closeDialog();
     }
   }
 
   Future<HashMap<String, dynamic>> login() async {
     DialogUtils.showLoadingDialog();
     final response = await authRepository.login(_email, _password);
+    DialogUtils.closeDialog();
     return response;
   }
 
