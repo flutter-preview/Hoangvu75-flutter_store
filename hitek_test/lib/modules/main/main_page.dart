@@ -24,26 +24,16 @@ class _MainPageState extends BaseStatePage<MainPage> {
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return StreamBuilder<int>(
-      stream: _mainController.pageIndex.stream,
-      builder: (context, snapshot) {
-        return Scaffold(
-          appBar: baseAppBar(),
-          extendBody: true,
-          // body: mainController.pages[mainController.pageIndex.value],
-          // body: IndexedStack(
-          //   index: mainController.pageIndex.value,
-          //   children: mainController.pages,
-          // ),
-          body: SizedBox.expand(
-            child: PageView(
-              controller: _mainController.pageController,
-              children: _mainController.pages,
-            ),
-          ),
-          bottomNavigationBar: buildMyNavBar(context),
-        );
-      },
+    return Scaffold(
+      appBar: baseAppBar(),
+      extendBody: true,
+      body: SizedBox.expand(
+        child: PageView(
+          controller: _mainController.pageController,
+          children: _mainController.pages,
+        ),
+      ),
+      bottomNavigationBar: buildMyNavBar(context),
     );
   }
 
