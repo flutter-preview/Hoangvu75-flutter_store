@@ -65,7 +65,7 @@ class _MainPageState extends BaseStatePage<MainPage> {
               ),
             ),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 navBarButton(0, Icons.storefront_outlined, "Store", _mainController.isSelected_0),
                 navBarButton(1, Icons.shopping_cart_outlined, "My cart", _mainController.isSelected_1),
@@ -84,14 +84,14 @@ class _MainPageState extends BaseStatePage<MainPage> {
     String label,
     BehaviorSubject<bool> isSelected,
   ) {
-    final Color navBarButtonColor = isDarkMode() ? AppColor.DEFAULT_WHITE : AppColor.DEFAULT_BLACK;
-    final Color navBarTextColor = isDarkMode() ? AppColor.DEFAULT_WHITE : AppColor.DEFAULT_BLACK;
+    final Color iconColor = isDarkMode() ? AppColor.DEFAULT_WHITE : AppColor.DEFAULT_BLACK;
+    final Color labelColor = isDarkMode() ? AppColor.DEFAULT_WHITE : AppColor.DEFAULT_BLACK;
 
     return AnimatedIconButton(
       icon: Icon(
         iconData,
         size: 30,
-        color: navBarButtonColor,
+        color: iconColor,
       ),
       onTap: () {
         _mainController.onNavigate(position);
@@ -100,7 +100,7 @@ class _MainPageState extends BaseStatePage<MainPage> {
       labelStyle: TextStyle(
         fontSize: 16,
         fontWeight: FontWeight.bold,
-        color: navBarTextColor,
+        color: labelColor,
       ),
       isSelected: isSelected,
     );

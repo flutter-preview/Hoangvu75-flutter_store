@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hitek_test/common/theme/app_color.dart';
 import 'package:hitek_test/modules/store/store_controller.dart';
 import 'package:hitek_test/utils/image_path.dart';
+import 'package:hitek_test/widgets/animated_loading_label.dart';
 import 'package:hitek_test/widgets/scale_tap.dart';
 
 import '../../data/models/product.dart';
@@ -14,7 +15,8 @@ class StorePage extends StatefulWidget {
   State<StorePage> createState() => _StorePageState();
 }
 
-class _StorePageState extends State<StorePage> with TickerProviderStateMixin, AutomaticKeepAliveClientMixin {
+class _StorePageState extends State<StorePage>
+    with TickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   late ScrollController _scrollController;
   bool _showSmallTitle = false;
   late AnimationController _animationController;
@@ -37,8 +39,7 @@ class _StorePageState extends State<StorePage> with TickerProviderStateMixin, Au
         parent: _animationController,
         curve: Curves.easeInOut,
       ),
-    );
-    _animation.addListener(() => setState(() {}));
+    )..addListener(() => setState(() {}));
 
     _scrollController = ScrollController();
     _scrollController.addListener(() {
@@ -52,6 +53,13 @@ class _StorePageState extends State<StorePage> with TickerProviderStateMixin, Au
           _animationController.reset();
           _showSmallTitle = false;
         });
+      }
+
+      if (_scrollController.position.atEdge) {
+        bool isTop = _scrollController.position.pixels == 0;
+        if (!isTop) {
+          _storeController.onGetProduct();
+        }
       }
     });
 
@@ -92,7 +100,8 @@ class _StorePageState extends State<StorePage> with TickerProviderStateMixin, Au
                       FlexibleSpaceBar(
                         titlePadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                         title: Transform.translate(
-                          offset: _showSmallTitle ? Offset(0, _animation.value) : const Offset(0, 0),
+                          offset:
+                              _showSmallTitle ? Offset(0, _animation.value) : const Offset(0, 0),
                           child: Text(
                             "Sản phẩm",
                             style: TextStyle(
@@ -136,10 +145,20 @@ class _StorePageState extends State<StorePage> with TickerProviderStateMixin, Au
                 ),
               ),
               const SliverToBoxAdapter(
-                child: SizedBox(
-                  height: 200,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      height: 50,
+                    ),
+                    AnimatedLoadingLabel(),
+                    SizedBox(
+                      height: 150,
+                    )
+                  ],
                 ),
-              )
+              ),
             ],
           ),
         );
@@ -147,7 +166,7 @@ class _StorePageState extends State<StorePage> with TickerProviderStateMixin, Au
     );
   }
 
-  _productItemWidget(Product product) {
+  _productItemWidget(Product? product) {
     return TweenAnimationBuilder(
         tween: Tween<double>(
           begin: 0.5,
@@ -186,7 +205,7 @@ class _StorePageState extends State<StorePage> with TickerProviderStateMixin, Au
                             topRight: Radius.circular(10),
                           ),
                           child: Image.network(
-                            product.thumbnail!,
+                            product!.thumbnail!,
                             fit: BoxFit.cover,
                           ),
                         ),

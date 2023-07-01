@@ -44,8 +44,7 @@ class _AnimatedIconButtonState extends State<AnimatedIconButton>
         parent: _animationController,
         curve: Curves.easeInOut,
       ),
-    );
-    _animation.addListener(() => setState(() {}));
+    )..addListener(() => setState(() {}));
 
     widget.isSelected.listen((value) {
       if (value) {
@@ -98,7 +97,7 @@ class _AnimatedIconButtonState extends State<AnimatedIconButton>
                 const SizedBox(width: 5),
                 AnimatedContainer(
                   duration: const Duration(milliseconds: 500),
-                  width: widget.isSelected.value ? 75 : 0,
+                  width: widget.isSelected.value ? 70 : 0,
                   child: AnimatedOpacity(
                     opacity: widget.isSelected.value ? 1 : 0,
                     duration: const Duration(milliseconds: 1000),

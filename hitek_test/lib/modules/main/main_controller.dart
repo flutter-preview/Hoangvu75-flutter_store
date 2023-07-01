@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hitek_test/modules/cart/cart_page.dart';
 import 'package:hitek_test/modules/store/store_page.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -18,9 +19,7 @@ class MainController {
     pageController = PageController();
     pages = [
       const StorePage(),
-      Container(
-        color: Colors.blueAccent,
-      ),
+      const CartPage(),
       Container(
         color: Colors.greenAccent,
       ),
