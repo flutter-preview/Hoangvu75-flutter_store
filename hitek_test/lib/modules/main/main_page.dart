@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:hitek_test/common/theme/app_color.dart';
 import 'package:hitek_test/modules/base/base_page.dart';
 import 'package:hitek_test/modules/main/main_controller.dart';
@@ -14,27 +13,33 @@ class MainPage extends BasePage {
 }
 
 class _MainPageState extends BaseStatePage<MainPage> {
-  late MainController mainController;
+  late MainController _mainController;
 
   @override
   void initState() {
     super.initState();
-    mainController = MainController();
+    _mainController = MainController();
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
     return StreamBuilder<int>(
-      stream: mainController.pageIndex.stream,
+      stream: _mainController.pageIndex.stream,
       builder: (context, snapshot) {
         return Scaffold(
           appBar: baseAppBar(),
           extendBody: true,
           // body: mainController.pages[mainController.pageIndex.value],
-          body: IndexedStack(
-            index: mainController.pageIndex.value,
-            children: mainController.pages,
+          // body: IndexedStack(
+          //   index: mainController.pageIndex.value,
+          //   children: mainController.pages,
+          // ),
+          body: SizedBox.expand(
+            child: PageView(
+              controller: _mainController.pageController,
+              children: _mainController.pages,
+            ),
           ),
           bottomNavigationBar: buildMyNavBar(context),
         );
@@ -64,21 +69,17 @@ class _MainPageState extends BaseStatePage<MainPage> {
                 topLeft: Radius.circular(20),
                 topRight: Radius.circular(20),
               ),
-              border: Border(
-                // top: BorderSide(
-                //   : 2,
-                //   color: navBarBorderColor,
-                // )
-                // color: navBarBorderColor,
-                // width: 2,
+              border: Border.all(
+                color: navBarBorderColor,
+                width: 2,
               ),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                navBarButton(0, Icons.storefront_outlined, "Store", mainController.isSelected_0),
-                navBarButton(1, Icons.shopping_cart_outlined, "My cart", mainController.isSelected_1),
-                navBarButton(2, Icons.account_circle_outlined, "Account", mainController.isSelected_2),
+                navBarButton(0, Icons.storefront_outlined, "Store", _mainController.isSelected_0),
+                navBarButton(1, Icons.shopping_cart_outlined, "My cart", _mainController.isSelected_1),
+                navBarButton(2, Icons.account_circle_outlined, "Account", _mainController.isSelected_2),
               ],
             ),
           ),
@@ -103,7 +104,7 @@ class _MainPageState extends BaseStatePage<MainPage> {
         color: navBarButtonColor,
       ),
       onTap: () {
-        mainController.onNavigate(position);
+        _mainController.onNavigate(position);
       },
       label: label,
       labelStyle: TextStyle(

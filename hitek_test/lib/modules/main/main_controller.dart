@@ -9,6 +9,8 @@ class MainController {
   late BehaviorSubject<bool> isSelected_1;
   late BehaviorSubject<bool> isSelected_2;
 
+  late PageController pageController;
+
   late List<Widget> pages;
 
   MainController() {
@@ -27,12 +29,18 @@ class MainController {
         color: Colors.greenAccent,
       ),
     ];
+    pageController = PageController();
   }
 
   void onNavigate(int position) {
     isSelected_0.add((position == 0) ? true : false);
     isSelected_1.add((position == 1) ? true : false);
     isSelected_2.add((position == 2) ? true : false);
-    pageIndex.add(position);
+    // pageIndex.add(position);
+    pageController.animateToPage(
+      position,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.ease,
+    );
   }
 }

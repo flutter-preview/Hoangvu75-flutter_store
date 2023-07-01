@@ -34,9 +34,10 @@ class _ScaleTapState extends State<ScaleTap> with TickerProviderStateMixin {
     return GestureDetector(
       onTap: () {
         widget.onTap!();
-        _controller.forward();
-        Future.delayed(const Duration(milliseconds: 100), () {
-          _controller.reverse();
+        _controller.forward().then((value) {
+          Future.delayed(const Duration(milliseconds: 100), () {
+            _controller.reverse();
+          });
         });
       },
       onTapDown: (_) {

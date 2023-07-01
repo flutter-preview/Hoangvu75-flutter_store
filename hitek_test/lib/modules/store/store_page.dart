@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hitek_test/common/theme/app_color.dart';
@@ -15,11 +14,9 @@ class StorePage extends StatefulWidget {
   State<StorePage> createState() => _StorePageState();
 }
 
-class _StorePageState extends State<StorePage> with TickerProviderStateMixin {
+class _StorePageState extends State<StorePage> with TickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   late ScrollController _scrollController;
-
   bool _showSmallTitle = false;
-
   late AnimationController _animationController;
   late Animation _animation;
 
@@ -64,6 +61,7 @@ class _StorePageState extends State<StorePage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return StreamBuilder<dynamic>(
       stream: _storeController.storeControllerStream,
       builder: (context, snapshot) {
@@ -121,6 +119,11 @@ class _StorePageState extends State<StorePage> with TickerProviderStateMixin {
                   ),
                 ),
               ),
+              const SliverToBoxAdapter(
+                child: SizedBox(
+                  height: 25,
+                ),
+              ),
               SliverGrid.count(
                 crossAxisCount: 2,
                 childAspectRatio: 170 / 295,
@@ -128,93 +131,15 @@ class _StorePageState extends State<StorePage> with TickerProviderStateMixin {
                   _storeController.bsListProduct.value.length,
                   (index) {
                     Product product = _storeController.bsListProduct.value[index];
-                    return ScaleTap(
-                      onTap: () {},
-                      child: Container(
-                        margin: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: isDarkMode() ? AppColor.WHITE_OPACITY_20 : AppColor.WHITE_OPACITY_50,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            AspectRatio(
-                              aspectRatio: 1 / 1,
-                              child: ClipRRect(
-                                borderRadius: const BorderRadius.only(
-                                  topLeft: Radius.circular(10),
-                                  topRight: Radius.circular(10),
-                                ),
-                                child: Image.network(
-                                  product.thumbnail!,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                            Container(
-                              height: 60,
-                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                              child: Text(
-                                "${product.title}",
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                maxLines: 2,
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 5,
-                                horizontal: 10,
-                              ),
-                              child: Row(
-                                children: [
-                                  for (int i = 0; i < product.star!.round(); i++)
-                                    Row(
-                                      children: [
-                                        SvgPicture.asset(
-                                          ImagePaths.rating_star_yellow,
-                                          width: 10,
-                                          height: 10,
-                                        ),
-                                        const SizedBox(width: 5),
-                                      ],
-                                    ),
-                                  for (int i = 0; i < 5 - product.star!.round(); i++)
-                                    Row(
-                                      children: [
-                                        SvgPicture.asset(
-                                          ImagePaths.rating_star_grey,
-                                          width: 10,
-                                          height: 10,
-                                        ),
-                                        const SizedBox(width: 5),
-                                      ],
-                                    ),
-                                  const SizedBox(width: 2),
-                                  const VerticalDivider(
-                                    width: 1,
-                                    color: AppColor.DEFAULT_GREY,
-                                  ),
-                                  const SizedBox(width: 2),
-                                  Text(
-                                    "Đã bán: ${product.quantitySold}",
-                                    style: const TextStyle(
-                                      fontSize: 14
-                                    ),
-                                  )
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    );
+                    return _productItemWidget(product);
                   },
                 ),
               ),
+              const SliverToBoxAdapter(
+                child: SizedBox(
+                  height: 200,
+                ),
+              )
             ],
           ),
         );
@@ -222,7 +147,107 @@ class _StorePageState extends State<StorePage> with TickerProviderStateMixin {
     );
   }
 
+  _productItemWidget(Product product) {
+    return TweenAnimationBuilder(
+        tween: Tween<double>(
+          begin: 0.5,
+          end: 1,
+        ),
+        duration: const Duration(milliseconds: 500),
+        builder: (context, value, child) {
+          return Transform.scale(
+            scale: value,
+            child: Opacity(
+              opacity: value,
+              child: ScaleTap(
+                onTap: () {},
+                child: Container(
+                  margin: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: isDarkMode() ? AppColor.WHITE_OPACITY_20 : AppColor.DEFAULT_WHITE,
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        color: isDarkMode() ? AppColor.TRANSPARENT : Colors.grey.withOpacity(0.25),
+                        spreadRadius: 5,
+                        blurRadius: 7,
+                        offset: const Offset(0, 3), // changes position of shadow
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      AspectRatio(
+                        aspectRatio: 1 / 1,
+                        child: ClipRRect(
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(10),
+                            topRight: Radius.circular(10),
+                          ),
+                          child: Image.network(
+                            product.thumbnail!,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        height: 60,
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                        child: Text(
+                          "${product.title}",
+                          style: const TextStyle(
+                            fontSize: 16,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          maxLines: 2,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 5,
+                          horizontal: 10,
+                        ),
+                        child: Row(
+                          children: [
+                            for (int i = 0; i < 5; i++)
+                              Row(
+                                children: [
+                                  SvgPicture.asset(
+                                    ImagePaths.rating_star_yellow,
+                                    width: 10,
+                                    height: 10,
+                                    color: (i > product.star! - 1) ? AppColor.DEFAULT_GREY : null,
+                                  ),
+                                  const SizedBox(width: 5),
+                                ],
+                              ),
+                            const SizedBox(width: 2),
+                            const VerticalDivider(
+                              width: 10,
+                              color: Colors.black,
+                            ),
+                            const SizedBox(width: 2),
+                            Text(
+                              "Đã bán: ${product.quantitySold}",
+                              style: const TextStyle(fontSize: 14),
+                            )
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        });
+  }
+
   bool isDarkMode() {
     return MediaQuery.of(context).platformBrightness == Brightness.dark;
   }
+
+  @override
+  bool get wantKeepAlive => false;
 }
