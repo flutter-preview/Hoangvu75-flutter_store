@@ -31,28 +31,40 @@ class StoreController {
   late BehaviorSubject<double> _bsAnimationValue;
   double get animationValue => _bsAnimationValue.value;
 
+  late BehaviorSubject<bool> _bsIsLoading;
+  bool get isLoading => _bsIsLoading.value;
+
+  late BehaviorSubject<bool> _bsIsShowScrollUpButton;
+  bool get isShowScrollUpButton => _bsIsShowScrollUpButton.value;
+
   StoreController({required TickerProvider provider}) {
     setupProduct();
     setupAnimation(provider);
     setupScroll();
+    setupOtherVariable();
 
     storeControllerStream = Rx.combineLatestList<dynamic>([
       _bsListProduct,
       _bsTitleState,
       _bsAnimationValue,
+      _bsIsLoading,
     ]);
   }
 
   Future<void> onGetProduct() async {
-    List<Product> mListProduct = await getProduct();
-    List<Product> currentListProduct = _bsListProduct.value;
-    currentListProduct.addAll(mListProduct);
-    _bsListProduct.add(currentListProduct);
+    if (!_bsIsLoading.value) {
+      List<Product> mListProduct = await getProduct();
+      List<Product> currentListProduct = _bsListProduct.value;
+      currentListProduct.addAll(mListProduct);
+      _bsListProduct.add(currentListProduct);
+    }
   }
 
   Future<List<Product>> getProduct() async {
+    _bsIsLoading.add(true);
     final response = await _productRepository.getProduct('["\$all"]', 10, _currentPage);
     _currentPage++;
+    _bsIsLoading.add(false);
     return response;
   }
 
@@ -96,6 +108,12 @@ class StoreController {
         _bsTitleState.add(false);
       }
 
+      if (scrollController.offset > 1000) {
+        _bsIsShowScrollUpButton.add(true);
+      } else {
+        _bsIsShowScrollUpButton.add(false);
+      }
+
       if (scrollController.position.atEdge) {
         bool isTop = scrollController.position.pixels == 0;
         if (!isTop) {
@@ -103,6 +121,11 @@ class StoreController {
         }
       }
     });
+  }
+
+  void setupOtherVariable() {
+    _bsIsLoading = BehaviorSubject<bool>.seeded(false);
+    _bsIsShowScrollUpButton = BehaviorSubject<bool>.seeded(false);
   }
 
   Future<void> onRefreshProductList() async {

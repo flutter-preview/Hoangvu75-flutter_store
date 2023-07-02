@@ -10,6 +10,7 @@ class AppColor {
   static const BUTTON_BLUE = Color(0xFF547DBF);
   static const DEFAULT_BLUE = Colors.blueAccent;
   static const DEFAULT_RED = Colors.redAccent;
+  static const DEFAULT_ORANGE = Color(0xFFFF5100);
   static const DEFAULT_GREY = Colors.grey;
   static const DEFAULT_WHITE = Colors.white;
   static const WHITE_OPACITY_50 = Color(0x80FFFFFF);

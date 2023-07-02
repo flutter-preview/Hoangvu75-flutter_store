@@ -49,6 +49,7 @@ class NetworkConfig {
   void showAlertDialog(BuildContext context) {
     showDialog<void>(
       context: context,
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Network error'),

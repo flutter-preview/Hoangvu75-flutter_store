@@ -54,9 +54,7 @@ class _CartPageState extends State<CartPage> with AutomaticKeepAliveClientMixin 
                   child: FlexibleSpaceBar(
                     titlePadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                     title: Transform.translate(
-                      offset: _cartController.titleState
-                          ? Offset(0, _cartController.animationValue)
-                          : const Offset(0, 0),
+                      offset: _cartController.titleState ? Offset(0, _cartController.animationValue) : const Offset(0, 0),
                       child: Text(
                         "Giỏ hàng",
                         style: TextStyle(
@@ -75,48 +73,36 @@ class _CartPageState extends State<CartPage> with AutomaticKeepAliveClientMixin 
                   height: 25,
                 ),
               ),
-              if (CartController.listProductInCart.length > 1)
-                SliverToBoxAdapter(
-                  child: Container(
-                    padding: const EdgeInsets.all(10),
-                    child: Row(
-                      children: [
-                        Expanded(child: Container()),
-                        ScaleTap(
-                          onTap: () {
-                            DialogUtils.showOptionalDialog(
-                              title: "Đặt hàng",
-                              content: "Bạn có muốn đặt hàng cho tất cả sản phẩm trong giỏ hàng?",
-                              onConfirm: () {
-                                CartController.removeAllProduct();
-                                SnackBar snackBar = const SnackBar(
-                                  duration: Duration(seconds: 2),
-                                  behavior: SnackBarBehavior.floating,
-                                  content:
-                                      Text('Đặt hàng thành công. Sản phẩm đang chờ được xác nhận.'),
-                                );
-                                ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                              },
-                            );
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                                color: AppColor.DEFAULT_BLUE,
-                                borderRadius: BorderRadius.circular(10)),
-                            child: const Text(
-                              "Đặt hàng tất cả",
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: AppColor.DEFAULT_WHITE,
-                              ),
+              SliverToBoxAdapter(
+                child: AnimatedContainer(
+                  height: (CartController.listProductInCart.length > 1) ? 65 : 0,
+                  padding: const EdgeInsets.all(10),
+                  duration: const Duration(milliseconds: 500),
+                  child: Row(
+                    children: [
+                      Expanded(child: Container()),
+                      ScaleTap(
+                        onTap: () {
+                          DialogUtils.showConfirmAllOrderDialog(
+                            products: CartController.listProductInCart,
+                          );
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(color: AppColor.DEFAULT_BLUE, borderRadius: BorderRadius.circular(10)),
+                          child: const Text(
+                            "Đặt hàng tất cả",
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: AppColor.DEFAULT_WHITE,
                             ),
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
+              ),
               SliverList.list(
                 children: List.generate(
                   CartController.listProductInCart.length,
@@ -181,7 +167,10 @@ class _CartPageState extends State<CartPage> with AutomaticKeepAliveClientMixin 
                   ),
                   Flexible(
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                      padding: const EdgeInsets.only(
+                        top: 5,
+                        left: 10,
+                      ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisSize: MainAxisSize.max,

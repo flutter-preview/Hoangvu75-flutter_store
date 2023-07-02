@@ -22,12 +22,6 @@ class BaseStatePage<T extends BasePage> extends State<T> with AutomaticKeepAlive
     NetworkConfig.networkConfig.handleNativeMethodCall(context);
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    NetworkConfig.networkConfig.dispose();
-  }
-
   static const systemUIOverlayDark = SystemUiOverlayStyle(
     statusBarIconBrightness: Brightness.light,
     statusBarColor: AppColor.DEFAULT_BLACK,

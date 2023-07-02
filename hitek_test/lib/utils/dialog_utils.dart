@@ -90,8 +90,7 @@ class DialogUtils {
     );
   }
 
-  static void showOptionalDialog(
-      {required String title, required String content, required Function onConfirm}) {
+  static void showOptionalDialog({required String title, required String content, required Function onConfirm}) {
     showDialog<void>(
       barrierDismissible: false,
       context: navigatorKey.currentContext!,
@@ -312,9 +311,9 @@ class DialogUtils {
                       ),
                     ),
                     TextSpan(
-                      text: Formatter.formatNumber(
-                        "${(product.amountInCart! * product.price!)} đ",
-                      ),
+                      text: "${Formatter.formatNumber(
+                        (product.amountInCart! * product.price!).toString(),
+                      )} đ",
                       style: const TextStyle(
                         fontSize: 16.0,
                         color: AppColor.DEFAULT_RED,
@@ -352,11 +351,100 @@ class DialogUtils {
                 ),
               ),
               onPressed: () async {
-                CartController.addProduct(product);
+                CartController.removeProduct(product);
                 SnackBar snackBar = const SnackBar(
                   duration: Duration(seconds: 2),
                   behavior: SnackBarBehavior.floating,
-                  content: Text('Thêm hàng thành công, hãy kiểm tra giỏ hàng.'),
+                  content: Text('Đặt hàng thành công, đơn hàng đang được giao.'),
+                );
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                await closeDialog();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  static void showConfirmAllOrderDialog({
+    required List<Product> products,
+  }) {
+    int totalPrice = 0;
+    for (var element in products) {
+      totalPrice += element.price! * element.amountInCart!;
+    }
+
+    showDialog<void>(
+      barrierDismissible: false,
+      context: navigatorKey.currentContext!,
+      builder: (BuildContext context) {
+        onDialogContextComplete(context);
+        return AlertDialog(
+          title: const Text("Xác nhận đơn hàng."),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                "Bạn có muốn đặt hàng cho tất cả sản phẩm trong giỏ hàng?",
+                style: TextStyle(
+                  fontSize: 16.0,
+                ),
+              ),
+              const SizedBox(height: 20),
+              Text.rich(
+                TextSpan(
+                  children: [
+                    const TextSpan(
+                      text: "Tổng giá: ",
+                      style: TextStyle(
+                        fontSize: 16.0,
+                      ),
+                    ),
+                    TextSpan(
+                      text: "${Formatter.formatNumber(totalPrice.toString())} đ",
+                      style: const TextStyle(
+                        fontSize: 16.0,
+                        color: AppColor.DEFAULT_RED,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          actions: <Widget>[
+            TextButton(
+              style: TextButton.styleFrom(
+                textStyle: Theme.of(context).textTheme.labelLarge,
+              ),
+              child: const Text(
+                'Cancel',
+                style: TextStyle(
+                  fontSize: 16.0,
+                ),
+              ),
+              onPressed: () async {
+                await closeDialog();
+              },
+            ),
+            TextButton(
+              style: TextButton.styleFrom(
+                textStyle: Theme.of(context).textTheme.labelLarge,
+              ),
+              child: const Text(
+                'Confirm',
+                style: TextStyle(
+                  fontSize: 16.0,
+                ),
+              ),
+              onPressed: () async {
+                CartController.removeAllProduct();
+                SnackBar snackBar = const SnackBar(
+                  duration: Duration(seconds: 2),
+                  behavior: SnackBarBehavior.floating,
+                  content: Text('Đặt hàng thành công, đơn hàng đang được giao.'),
                 );
                 ScaffoldMessenger.of(context).showSnackBar(snackBar);
                 await closeDialog();

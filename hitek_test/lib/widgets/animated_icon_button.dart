@@ -2,31 +2,32 @@ import 'package:flutter/material.dart';
 import 'package:hitek_test/widgets/scale_tap.dart';
 import 'package:rxdart/rxdart.dart';
 
+import '../common/theme/app_color.dart';
+
 class AnimatedIconButton extends StatefulWidget {
   const AnimatedIconButton({
     super.key,
-    required this.icon,
+    required this.iconData,
     required this.onTap,
     required this.label,
-    this.labelStyle,
     required this.isSelected,
   });
 
-  final Icon icon;
+  final IconData iconData;
   final Function onTap;
   final String label;
-  final TextStyle? labelStyle;
   final BehaviorSubject<bool> isSelected;
 
   @override
   State<AnimatedIconButton> createState() => _AnimatedIconButtonState();
 }
 
-class _AnimatedIconButtonState extends State<AnimatedIconButton>
-    with SingleTickerProviderStateMixin {
+class _AnimatedIconButtonState extends State<AnimatedIconButton> with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation _animation;
   late Widget? _textLabel;
+
+  late Color tintColor;
 
   @override
   void initState() {
@@ -50,7 +51,10 @@ class _AnimatedIconButtonState extends State<AnimatedIconButton>
       if (value) {
         _textLabel = Text(
           widget.label,
-          style: widget.labelStyle!.copyWith(
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: tintColor,
             overflow: TextOverflow.fade,
           ),
           maxLines: 1,
@@ -66,6 +70,12 @@ class _AnimatedIconButtonState extends State<AnimatedIconButton>
     });
 
     _textLabel = const Text("");
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    tintColor = (MediaQuery.of(context).platformBrightness == Brightness.dark) ? AppColor.DEFAULT_WHITE : AppColor.DEFAULT_BLACK;
   }
 
   @override
@@ -93,7 +103,11 @@ class _AnimatedIconButtonState extends State<AnimatedIconButton>
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisSize: MainAxisSize.max,
               children: [
-                widget.icon,
+                Icon(
+                  widget.iconData,
+                  size: 30,
+                  color: tintColor,
+                ),
                 const SizedBox(width: 5),
                 AnimatedContainer(
                   duration: const Duration(milliseconds: 500),

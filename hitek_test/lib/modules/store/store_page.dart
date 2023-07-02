@@ -42,147 +42,176 @@ class _StorePageState extends State<StorePage> with AutomaticKeepAliveClientMixi
     return StreamBuilder<dynamic>(
       stream: _storeController.storeControllerStream,
       builder: (context, snapshot) {
-        return Container(
-          color: isDarkMode() ? null : AppColor.STORE_BG_WHITE,
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          child: RefreshIndicator(
-            onRefresh: () => _storeController.onRefreshProductList(),
-            child: CustomScrollView(
-              controller: _storeController.scrollController,
-              physics: const BouncingScrollPhysics(),
-              slivers: [
-                SliverAppBar(
-                  pinned: true,
-                  snap: false,
-                  floating: false,
-                  expandedHeight: 150,
-                  elevation: 0,
-                  automaticallyImplyLeading: false,
-                  backgroundColor: AppColor.TRANSPARENT,
-                  flexibleSpace: Container(
-                    decoration: const BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [AppColor.APP_BAR_START, AppColor.APP_BAR_END],
-                      ),
-                    ),
-                    child: Stack(
-                      children: [
-                        FlexibleSpaceBar(
-                          titlePadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                          title: Transform.translate(
-                            offset: _storeController.titleState
-                                ? Offset(0, _storeController.animationValue)
-                                : const Offset(0, 0),
-                            child: Text(
-                              "Sản phẩm",
-                              style: TextStyle(
-                                fontSize: _storeController.titleState ? 20 : 30,
-                                color: AppColor.DEFAULT_BLACK,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
+        return Stack(
+          children: [
+            Container(
+              color: isDarkMode() ? null : AppColor.STORE_BG_WHITE,
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              child: RefreshIndicator(
+                onRefresh: () => _storeController.onRefreshProductList(),
+                child: CustomScrollView(
+                  controller: _storeController.scrollController,
+                  physics: const BouncingScrollPhysics(),
+                  slivers: [
+                    SliverAppBar(
+                      pinned: true,
+                      snap: false,
+                      floating: false,
+                      expandedHeight: 150,
+                      elevation: 0,
+                      automaticallyImplyLeading: false,
+                      backgroundColor: AppColor.TRANSPARENT,
+                      flexibleSpace: Container(
+                        decoration: const BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [AppColor.APP_BAR_START, AppColor.APP_BAR_END],
                           ),
-                          centerTitle: _storeController.titleState ? true : false,
                         ),
-                        Positioned(
-                          top: _storeController.titleState ? 10 : null,
-                          right: 20,
-                          bottom: _storeController.titleState ? 0 : 20,
-                          child: ScaleTap(
-                            onTap: () {
-                              MainController.onNavigate(1);
-                            },
-                            child: Stack(
-                              children: [
-                                Row(
+                        child: Stack(
+                          children: [
+                            FlexibleSpaceBar(
+                              titlePadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                              title: Transform.translate(
+                                offset:
+                                    _storeController.titleState ? Offset(0, _storeController.animationValue) : const Offset(0, 0),
+                                child: Text(
+                                  "Sản phẩm",
+                                  style: TextStyle(
+                                    fontSize: _storeController.titleState ? 20 : 30,
+                                    color: AppColor.DEFAULT_BLACK,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                              centerTitle: _storeController.titleState ? true : false,
+                            ),
+                            Positioned(
+                              top: _storeController.titleState ? 10 : null,
+                              right: 20,
+                              bottom: _storeController.titleState ? 0 : 20,
+                              child: ScaleTap(
+                                onTap: () {
+                                  MainController.onNavigate(1);
+                                },
+                                child: Stack(
                                   children: [
-                                    Column(
+                                    Row(
                                       children: [
-                                        const SizedBox(
-                                          height: 5,
+                                        Column(
+                                          children: [
+                                            const SizedBox(
+                                              height: 5,
+                                            ),
+                                            SvgPicture.asset(
+                                              ImagePaths.icon_cart,
+                                              width: 35,
+                                              height: 35,
+                                            ),
+                                          ],
                                         ),
-                                        SvgPicture.asset(
-                                          ImagePaths.icon_cart,
-                                          width: 35,
-                                          height: 35,
+                                        const SizedBox(
+                                          width: 5,
                                         ),
                                       ],
                                     ),
-                                    const SizedBox(
-                                      width: 5,
-                                    ),
-                                  ],
-                                ),
-                                Positioned(
-                                  top: 0,
-                                  right: 0,
-                                  child: Container(
-                                    width: 20,
-                                    height: 20,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(100),
-                                        color: AppColor.DEFAULT_YELLOW),
-                                    child: Center(
+                                    Positioned(
+                                      top: 0,
+                                      right: 0,
                                       child: StreamBuilder<List<Product>>(
                                         stream: CartController.listProductInCartStream,
                                         builder: (context, snapshot) {
-                                          return Text(
-                                            "${CartController.listProductInCart.length}",
-                                            style: const TextStyle(
-                                              fontSize: 12,
-                                              color: AppColor.DEFAULT_BLACK,
-                                            ),
-                                          );
+                                          return (CartController.listProductInCart.isNotEmpty)
+                                              ? Container(
+                                                  width: 20,
+                                                  height: 20,
+                                                  decoration: BoxDecoration(
+                                                    borderRadius: BorderRadius.circular(100),
+                                                    color: AppColor.DEFAULT_YELLOW,
+                                                  ),
+                                                  child: Center(
+                                                    child: Text(
+                                                      "${CartController.listProductInCart.length}",
+                                                      style: const TextStyle(
+                                                        fontSize: 12,
+                                                        color: AppColor.DEFAULT_BLACK,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                )
+                                              : Container();
                                         },
                                       ),
                                     ),
-                                  ),
+                                  ],
                                 ),
-                              ],
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-                const SliverToBoxAdapter(
-                  child: SizedBox(
-                    height: 25,
-                  ),
-                ),
-                SliverGrid.count(
-                  crossAxisCount: 2,
-                  childAspectRatio: 170 / 295,
-                  children: List.generate(
-                    _storeController.listProduct.length,
-                    (index) {
-                      Product product = _storeController.listProduct[index];
-                      return _productItemWidget(product);
-                    },
-                  ),
-                ),
-                const SliverToBoxAdapter(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        height: 50,
+                              ),
+                            )
+                          ],
+                        ),
                       ),
-                      AnimatedLoadingLabel(),
-                      SizedBox(
-                        height: 150,
-                      )
-                    ],
+                    ),
+                    const SliverToBoxAdapter(
+                      child: SizedBox(
+                        height: 25,
+                      ),
+                    ),
+                    SliverGrid.count(
+                      crossAxisCount: 2,
+                      childAspectRatio: 170 / 295,
+                      children: List.generate(
+                        _storeController.listProduct.length,
+                        (index) {
+                          Product product = _storeController.listProduct[index];
+                          return _productItemWidget(product);
+                        },
+                      ),
+                    ),
+                    SliverToBoxAdapter(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const SizedBox(
+                            height: 50,
+                          ),
+                          _storeController.isLoading ? const AnimatedLoadingLabel() : Container(),
+                          const SizedBox(
+                            height: 125,
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Positioned(
+              bottom: 80,
+              right: 20,
+              child: AnimatedOpacity(
+                opacity: (_storeController.isShowScrollUpButton) ? 1 : 0,
+                duration: const Duration(milliseconds: 500),
+                child: FloatingActionButton(
+                  onPressed: () {
+                    _storeController.scrollController.animateTo(
+                      0,
+                      duration: const Duration(milliseconds: 1000),
+                      curve: Curves.ease,
+                    );
+                  },
+                  backgroundColor: AppColor.DEFAULT_ORANGE.withOpacity(0.95),
+                  child: const Icon(
+                    Icons.arrow_upward_sharp,
+                    size: 30,
+                    color: AppColor.DEFAULT_WHITE,
                   ),
                 ),
-              ],
+              ),
             ),
-          ),
+          ],
         );
       },
     );
@@ -261,19 +290,20 @@ class _StorePageState extends State<StorePage> with AutomaticKeepAliveClientMixi
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                for (int i = 0; i < 5; i++)
-                                  Row(
-                                    children: [
-                                      SvgPicture.asset(
-                                        ImagePaths.rating_star_yellow,
-                                        width: 10,
-                                        height: 10,
-                                        color:
-                                            (i > product.star! - 1) ? AppColor.DEFAULT_GREY : null,
+                                Row(
+                                  children: [
+                                    for (int i = 0; i < 5; i++)
+                                      Padding(
+                                        padding: const EdgeInsets.only(right: 3),
+                                        child: SvgPicture.asset(
+                                          ImagePaths.rating_star_yellow,
+                                          width: 10,
+                                          height: 10,
+                                          color: (i > product.star! - 1) ? AppColor.DEFAULT_GREY : null,
+                                        ),
                                       ),
-                                      const SizedBox(width: 3),
-                                    ],
-                                  ),
+                                  ],
+                                ),
                                 const VerticalDivider(
                                   thickness: 1,
                                   color: AppColor.DEFAULT_GREY,
@@ -346,6 +376,7 @@ class _StorePageState extends State<StorePage> with AutomaticKeepAliveClientMixi
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
+                                  color: AppColor.DEFAULT_BLACK,
                                 ),
                               ),
                             ),

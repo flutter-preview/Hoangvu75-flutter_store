@@ -90,24 +90,12 @@ class _MainPageState extends BaseStatePage<MainPage> with TickerProviderStateMix
     String label,
     BehaviorSubject<bool> isSelected,
   ) {
-    final Color iconColor = isDarkMode() ? AppColor.DEFAULT_WHITE : AppColor.DEFAULT_BLACK;
-    final Color labelColor = isDarkMode() ? AppColor.DEFAULT_WHITE : AppColor.DEFAULT_BLACK;
-
     return AnimatedIconButton(
-      icon: Icon(
-        iconData,
-        size: 30,
-        color: iconColor,
-      ),
+      iconData: iconData,
       onTap: () {
         MainController.onNavigate(position);
       },
       label: label,
-      labelStyle: TextStyle(
-        fontSize: 16,
-        fontWeight: FontWeight.bold,
-        color: labelColor,
-      ),
       isSelected: isSelected,
     );
   }
