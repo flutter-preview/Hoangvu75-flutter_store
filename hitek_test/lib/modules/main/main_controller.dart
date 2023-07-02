@@ -25,7 +25,9 @@ class MainController {
 
     pages = [
       StorePage(controller: storeController),
-      CartPage(controller: cartController,),
+      CartPage(
+        controller: cartController,
+      ),
       Container(
         color: Colors.greenAccent,
       ),
@@ -33,14 +35,18 @@ class MainController {
   }
 
   static void onNavigate(int position) {
+    changeButtonPos(position);
+    pageController.animateToPage(
+      position,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.linear,
+    );
+  }
+
+  static void changeButtonPos(int position) {
     isSelected_0.add((position == 0) ? true : false);
     isSelected_1.add((position == 1) ? true : false);
     isSelected_2.add((position == 2) ? true : false);
-    pageController.animateToPage(
-      position,
-      duration: const Duration(milliseconds: 500),
-      curve: Curves.ease,
-    );
   }
 
   void dispose() {

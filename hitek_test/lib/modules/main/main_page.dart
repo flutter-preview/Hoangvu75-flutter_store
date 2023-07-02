@@ -37,7 +37,7 @@ class _MainPageState extends BaseStatePage<MainPage> with TickerProviderStateMix
         child: PageView(
           controller: MainController.pageController,
           onPageChanged: (page) {
-            MainController.onNavigate(page);
+            MainController.changeButtonPos(page);
           },
           children: _mainController.pages,
         ),

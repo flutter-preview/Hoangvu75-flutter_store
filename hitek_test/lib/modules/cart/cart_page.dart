@@ -54,7 +54,9 @@ class _CartPageState extends State<CartPage> with AutomaticKeepAliveClientMixin 
                   child: FlexibleSpaceBar(
                     titlePadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                     title: Transform.translate(
-                      offset: _cartController.titleState ? Offset(0, _cartController.animationValue) : const Offset(0, 0),
+                      offset: _cartController.titleState
+                          ? Offset(0, _cartController.animationValue)
+                          : const Offset(0, 0),
                       child: Text(
                         "Giỏ hàng",
                         style: TextStyle(
@@ -90,7 +92,8 @@ class _CartPageState extends State<CartPage> with AutomaticKeepAliveClientMixin 
                                 SnackBar snackBar = const SnackBar(
                                   duration: Duration(seconds: 2),
                                   behavior: SnackBarBehavior.floating,
-                                  content: Text('Đặt hàng thành công. Sản phẩm đang chờ được xác nhận.'),
+                                  content:
+                                      Text('Đặt hàng thành công. Sản phẩm đang chờ được xác nhận.'),
                                 );
                                 ScaffoldMessenger.of(context).showSnackBar(snackBar);
                               },
@@ -99,13 +102,13 @@ class _CartPageState extends State<CartPage> with AutomaticKeepAliveClientMixin 
                           child: Container(
                             padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
-                              color: AppColor.DEFAULT_BLUE,
-                              borderRadius: BorderRadius.circular(10)
-                            ),
+                                color: AppColor.DEFAULT_BLUE,
+                                borderRadius: BorderRadius.circular(10)),
                             child: const Text(
                               "Đặt hàng tất cả",
                               style: TextStyle(
-                                fontSize: 16
+                                fontSize: 16,
+                                color: AppColor.DEFAULT_WHITE,
                               ),
                             ),
                           ),
@@ -200,6 +203,22 @@ class _CartPageState extends State<CartPage> with AutomaticKeepAliveClientMixin 
                             ),
                             maxLines: 1,
                           ),
+                          Text.rich(
+                            TextSpan(
+                                text: "SL: ",
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                ),
+                                children: [
+                                  TextSpan(
+                                      text: "${product.amountInCart}",
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        color: AppColor.DEFAULT_BLUE,
+                                        fontWeight: FontWeight.bold,
+                                      ))
+                                ]),
+                          ),
                           Align(
                             alignment: AlignmentDirectional.bottomEnd,
                             child: Text(
@@ -254,18 +273,9 @@ class _CartPageState extends State<CartPage> with AutomaticKeepAliveClientMixin 
                         ),
                         ScaleTap(
                           onTap: () {
-                            DialogUtils.showOptionalDialog(
-                              title: "Đặt hàng",
-                              content: "Bạn có muốn đặt hàng ${product.title}?",
-                              onConfirm: () {
-                                CartController.removeProduct(product);
-                                SnackBar snackBar = const SnackBar(
-                                  duration: Duration(seconds: 2),
-                                  behavior: SnackBarBehavior.floating,
-                                  content: Text('Đặt hàng thành công. Sản phẩm đang chờ được xác nhận.'),
-                                );
-                                ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                              },
+                            DialogUtils.showConfirmOrderDialog(
+                              product: product,
+                              amount: product.amountInCart!,
                             );
                           },
                           child: const Text(

@@ -73,7 +73,9 @@ class _StorePageState extends State<StorePage> with AutomaticKeepAliveClientMixi
                         FlexibleSpaceBar(
                           titlePadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                           title: Transform.translate(
-                            offset: _storeController.titleState ? Offset(0, _storeController.animationValue) : const Offset(0, 0),
+                            offset: _storeController.titleState
+                                ? Offset(0, _storeController.animationValue)
+                                : const Offset(0, 0),
                             child: Text(
                               "Sản phẩm",
                               style: TextStyle(
@@ -120,8 +122,9 @@ class _StorePageState extends State<StorePage> with AutomaticKeepAliveClientMixi
                                   child: Container(
                                     width: 20,
                                     height: 20,
-                                    decoration:
-                                        BoxDecoration(borderRadius: BorderRadius.circular(100), color: AppColor.DEFAULT_YELLOW),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(100),
+                                        color: AppColor.DEFAULT_YELLOW),
                                     child: Center(
                                       child: StreamBuilder<List<Product>>(
                                         stream: CartController.listProductInCartStream,
@@ -199,24 +202,10 @@ class _StorePageState extends State<StorePage> with AutomaticKeepAliveClientMixi
             opacity: value,
             child: ScaleTap(
               onTap: () {
-                DialogUtils.showOptionalDialog(
+                DialogUtils.showOrderDialog(
                   title: "Thêm sản phẩm",
                   content: "Bạn có muốn thêm ${product.title} vào giỏ hàng?",
-                  onConfirm: () {
-                    CartController.addProduct(product);
-                    SnackBar snackBar = SnackBar(
-                      duration: const Duration(seconds: 2),
-                      behavior: SnackBarBehavior.floating,
-                      content: const Text('Thêm hàng thành công, hãy kiểm tra giỏ hàng.'),
-                      action: SnackBarAction(
-                        label: 'Hoàn tác',
-                        onPressed: () {
-                          CartController.removeProduct(product);
-                        },
-                      ),
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                  },
+                  product: product,
                 );
               },
               child: Container(
@@ -270,6 +259,7 @@ class _StorePageState extends State<StorePage> with AutomaticKeepAliveClientMixi
                           ),
                           child: IntrinsicHeight(
                             child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 for (int i = 0; i < 5; i++)
                                   Row(
@@ -278,20 +268,25 @@ class _StorePageState extends State<StorePage> with AutomaticKeepAliveClientMixi
                                         ImagePaths.rating_star_yellow,
                                         width: 10,
                                         height: 10,
-                                        color: (i > product.star! - 1) ? AppColor.DEFAULT_GREY : null,
+                                        color:
+                                            (i > product.star! - 1) ? AppColor.DEFAULT_GREY : null,
                                       ),
-                                      const SizedBox(width: 5),
+                                      const SizedBox(width: 3),
                                     ],
                                   ),
-                                const SizedBox(width: 2),
                                 const VerticalDivider(
                                   thickness: 1,
                                   color: AppColor.DEFAULT_GREY,
                                 ),
-                                const SizedBox(width: 2),
-                                Text(
-                                  "Đã bán: ${product.quantitySold}",
-                                  style: const TextStyle(fontSize: 14),
+                                Flexible(
+                                  child: Text(
+                                    "Đã bán: ${product.quantitySold}",
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      overflow: TextOverflow.clip,
+                                    ),
+                                    maxLines: 1,
+                                  ),
                                 )
                               ],
                             ),

@@ -11,6 +11,7 @@ class Product {
   String? thumbnail;
   List<String>? image;
   @JsonKey(name: "bonus_point")
+  int? amountInCart;
   int? bonusPoint;
   double? star;
   @JsonKey(name: "fake_price")
@@ -49,6 +50,7 @@ class Product {
     this.description,
     this.thumbnail,
     this.image,
+    this.amountInCart,
     this.bonusPoint,
     this.star,
     this.fakePrice,
