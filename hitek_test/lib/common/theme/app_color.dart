@@ -18,4 +18,7 @@ class AppColor {
   static const APP_BAR_START = Color(0xFF84DAE8);
   static const APP_BAR_END = Color(0xFFBFF8EE);
   static const STORE_BG_WHITE = Color(0xFFEFEFEF);
+  static const DEFAULT_YELLOW = Color(0xFFE7D600);
+  static const GREEN = Color(0xFF30A953);
+  static const LIGHT_GREEN = Color(0xFFC0FFD2);
 }

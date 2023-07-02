@@ -15,18 +15,18 @@ class LoginPage extends BasePage {
 }
 
 class _LoginPageState extends BaseStatePage<LoginPage> {
-  late final LoginController _controller;
+  late final LoginController _loginController;
 
   @override
   void initState() {
     super.initState();
-    _controller = LoginController();
+    _loginController = LoginController();
   }
 
   @override
   void dispose() {
     super.dispose();
-    _controller.dispose();
+    _loginController.dispose();
   }
 
   @override
@@ -116,7 +116,7 @@ class _LoginPageState extends BaseStatePage<LoginPage> {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 36.0),
       child: AnimatedTextField(
-        controller: _controller.emailController,
+        controller: _loginController.emailController,
         isFocusedBorderWidth: 3.0,
         isUnfocusedBorderWidth: 1.0,
         isFocusedBorderColor: AppColor.DEFAULT_BLUE,
@@ -135,7 +135,7 @@ class _LoginPageState extends BaseStatePage<LoginPage> {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 36.0),
       child: AnimatedTextField(
-        controller: _controller.passwordController,
+        controller: _loginController.passwordController,
         isFocusedBorderWidth: 3.0,
         isUnfocusedBorderWidth: 1.0,
         isFocusedBorderColor: AppColor.DEFAULT_BLUE,
@@ -154,7 +154,7 @@ class _LoginPageState extends BaseStatePage<LoginPage> {
   ScaleTap _loginButton() {
     return ScaleTap(
       onTap: () {
-        _controller.onLogin();
+        _loginController.onLogin();
       },
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 36.0),

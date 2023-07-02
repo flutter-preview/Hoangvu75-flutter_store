@@ -24,9 +24,9 @@ class MyApp extends StatelessWidget {
       themeMode: ThemeMode.system,
       darkTheme: ThemeData.dark(useMaterial3: true),
       navigatorKey: navigatorKey,
-      initialRoute: "/main",
+      initialRoute: "/",
       routes: {
-        '/s': (context) => const SplashPage(),
+        '/': (context) => const SplashPage(),
         '/login': (context) => const LoginPage(),
         '/main': (context) => const MainPage(),
       },

@@ -14,6 +14,8 @@ Product _$ProductFromJson(Map<String, dynamic> json) => Product(
       thumbnail: json['thumbnail'] as String?,
       image:
           (json['image'] as List<dynamic>?)?.map((e) => e as String).toList(),
+      bonusPoint: json['bonus_point'] as int?,
+      star: (json['star'] as num?)?.toDouble(),
       fakePrice: json['fake_price'] as int?,
       collabPrice: json['collab_price'] as int?,
       quantitySold: json['quantity_sold'] as int?,
@@ -29,7 +31,7 @@ Product _$ProductFromJson(Map<String, dynamic> json) => Product(
       createdAt: json['created_at'] as String?,
       updatedAt: json['updated_at'] as String?,
       deletedAt: json['deleted_at'] as String?,
-    )..star = (json['star'] as num?)?.toDouble();
+    );
 
 Map<String, dynamic> _$ProductToJson(Product instance) => <String, dynamic>{
       'id': instance.id,
@@ -38,6 +40,7 @@ Map<String, dynamic> _$ProductToJson(Product instance) => <String, dynamic>{
       'description': instance.description,
       'thumbnail': instance.thumbnail,
       'image': instance.image,
+      'bonus_point': instance.bonusPoint,
       'star': instance.star,
       'fake_price': instance.fakePrice,
       'collab_price': instance.collabPrice,

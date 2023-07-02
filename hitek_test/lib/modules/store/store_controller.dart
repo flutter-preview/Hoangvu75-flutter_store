@@ -17,28 +17,102 @@ import '../../utils/dialog_utils.dart';
 class StoreController {
   late Stream<dynamic> storeControllerStream;
 
-  late final IProductRepository productRepository;
-  int currentPage = 1;
-  BehaviorSubject<List<Product>> bsListProduct = BehaviorSubject<List<Product>>.seeded([]);
+  late IProductRepository _productRepository;
+  late int _currentPage;
+  late BehaviorSubject<List<Product>> _bsListProduct;
+  List<Product> get listProduct => _bsListProduct.value;
 
-  StoreController() {
+  late ScrollController scrollController;
+  late BehaviorSubject<bool> _bsTitleState;
+  bool get titleState => _bsTitleState.value;
+
+  late AnimationController _animationController;
+  late Animation _animation;
+  late BehaviorSubject<double> _bsAnimationValue;
+  double get animationValue => _bsAnimationValue.value;
+
+  StoreController({required TickerProvider provider}) {
+    setupProduct();
+    setupAnimation(provider);
+    setupScroll();
+
     storeControllerStream = Rx.combineLatestList<dynamic>([
-      bsListProduct,
+      _bsListProduct,
+      _bsTitleState,
+      _bsAnimationValue,
     ]);
-
-    productRepository = ProductRepository(api: BaseService());
   }
 
   Future<void> onGetProduct() async {
     List<Product> mListProduct = await getProduct();
-    List<Product> currentListProduct = bsListProduct.value;
+    List<Product> currentListProduct = _bsListProduct.value;
     currentListProduct.addAll(mListProduct);
-    bsListProduct.add(currentListProduct);
+    _bsListProduct.add(currentListProduct);
   }
 
   Future<List<Product>> getProduct() async {
-    final response = await productRepository.getProduct('["\$all"]', 10, currentPage);
-    currentPage++;
+    final response = await _productRepository.getProduct('["\$all"]', 10, _currentPage);
+    _currentPage++;
     return response;
+  }
+
+  void setupProduct() {
+    _currentPage = 1;
+    _bsListProduct = BehaviorSubject<List<Product>>.seeded([]);
+    _productRepository = ProductRepository(api: BaseService());
+  }
+
+  void setupAnimation(TickerProvider provider) {
+    _animationController = AnimationController(
+      duration: const Duration(milliseconds: 250),
+      vsync: provider,
+    );
+
+    _bsAnimationValue = BehaviorSubject<double>.seeded(50);
+
+    _animation = Tween<double>(
+      begin: 50,
+      end: 0,
+    ).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: Curves.easeInOut,
+      ),
+    )..addListener(() {
+      _bsAnimationValue.add(_animation.value);
+    });
+  }
+
+  void setupScroll() {
+    _bsTitleState = BehaviorSubject<bool>.seeded(false);
+
+    scrollController = ScrollController();
+    scrollController.addListener(() {
+      if (scrollController.offset > 75) {
+        _animationController.forward();
+        _bsTitleState.add(true);
+      } else {
+        _animationController.reset();
+        _bsTitleState.add(false);
+      }
+
+      if (scrollController.position.atEdge) {
+        bool isTop = scrollController.position.pixels == 0;
+        if (!isTop) {
+          onGetProduct();
+        }
+      }
+    });
+  }
+
+  Future<void> onRefreshProductList() async {
+    _bsListProduct.add([]);
+    _currentPage = 1;
+    onGetProduct();
+    await Future.delayed(const Duration(seconds: 1));
+  }
+
+  void dispose() {
+    _animationController.dispose();
   }
 }

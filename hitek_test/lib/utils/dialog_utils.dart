@@ -8,7 +8,7 @@ import '../common/config/app_constants.dart';
 import '../widgets/type_writer_text.dart';
 
 class DialogUtils {
-  static late Completer<BuildContext>? _dialogContextCompleter = null;
+  static Completer<BuildContext>? _dialogContextCompleter;
 
   static void showNotificationDialog({required String title, required String content}) {
     showDialog<void>(
@@ -82,6 +82,56 @@ class DialogUtils {
       builder: (BuildContext context) {
         onDialogContextComplete(context);
         return alert;
+      },
+    );
+  }
+
+  static void showOptionalDialog({required String title, required String content, required Function onConfirm}) {
+    showDialog<void>(
+      barrierDismissible: false,
+      context: navigatorKey.currentContext!,
+      builder: (BuildContext context) {
+        onDialogContextComplete(context);
+        return AlertDialog(
+          title: Text(title),
+          content: Text(
+            content,
+            style: const TextStyle(
+              fontSize: 16.0,
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              style: TextButton.styleFrom(
+                textStyle: Theme.of(context).textTheme.labelLarge,
+              ),
+              child: const Text(
+                'Cancel',
+                style: TextStyle(
+                  fontSize: 16.0,
+                ),
+              ),
+              onPressed: () async {
+                await closeDialog();
+              },
+            ),
+            TextButton(
+              style: TextButton.styleFrom(
+                textStyle: Theme.of(context).textTheme.labelLarge,
+              ),
+              child: const Text(
+                'Confirm',
+                style: TextStyle(
+                  fontSize: 16.0,
+                ),
+              ),
+              onPressed: () async {
+                onConfirm();
+                await closeDialog();
+              },
+            ),
+          ],
+        );
       },
     );
   }

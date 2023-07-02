@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:json_annotation/json_annotation.dart';
 
 part 'product.g.dart';
@@ -12,6 +10,8 @@ class Product {
   String? description;
   String? thumbnail;
   List<String>? image;
+  @JsonKey(name: "bonus_point")
+  int? bonusPoint;
   double? star;
   @JsonKey(name: "fake_price")
   int? fakePrice;
@@ -49,6 +49,8 @@ class Product {
     this.description,
     this.thumbnail,
     this.image,
+    this.bonusPoint,
+    this.star,
     this.fakePrice,
     this.collabPrice,
     this.quantitySold,

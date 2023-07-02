@@ -13,6 +13,7 @@ class _AnimatedLoadingLabelState extends State<AnimatedLoadingLabel> with Ticker
   late _LoadingLabelAnimationObject _animationObject_1;
   late _LoadingLabelAnimationObject _animationObject_2;
   late _LoadingLabelAnimationObject _animationObject_3;
+  late _LoadingLabelAnimationObject _animationObject_4;
 
   @override
   void initState() {
@@ -29,6 +30,10 @@ class _AnimatedLoadingLabelState extends State<AnimatedLoadingLabel> with Ticker
       provider: this,
       delay: const Duration(milliseconds: 600),
     );
+    _animationObject_4 = _LoadingLabelAnimationObject(
+      provider: this,
+      delay: const Duration(milliseconds: 900),
+    );
   }
 
   @override
@@ -41,6 +46,8 @@ class _AnimatedLoadingLabelState extends State<AnimatedLoadingLabel> with Ticker
         _buildLoadingObject(_animationObject_2),
         const SizedBox(width: 15),
         _buildLoadingObject(_animationObject_3),
+        const SizedBox(width: 15),
+        _buildLoadingObject(_animationObject_4),
       ],
     );
   }

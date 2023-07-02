@@ -12,13 +12,19 @@ class MainPage extends BasePage {
   State<MainPage> createState() => _MainPageState();
 }
 
-class _MainPageState extends BaseStatePage<MainPage> {
+class _MainPageState extends BaseStatePage<MainPage> with TickerProviderStateMixin {
   late MainController _mainController;
 
   @override
   void initState() {
     super.initState();
-    _mainController = MainController();
+    _mainController = MainController(provider: this);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _mainController.dispose();
   }
 
   @override
@@ -29,7 +35,10 @@ class _MainPageState extends BaseStatePage<MainPage> {
       extendBody: true,
       body: SizedBox.expand(
         child: PageView(
-          controller: _mainController.pageController,
+          controller: MainController.pageController,
+          onPageChanged: (page) {
+            MainController.onNavigate(page);
+          },
           children: _mainController.pages,
         ),
       ),
@@ -39,7 +48,6 @@ class _MainPageState extends BaseStatePage<MainPage> {
 
   TweenAnimationBuilder<double> buildMyNavBar(BuildContext context) {
     final Color navBarBackgroundColor = isDarkMode() ? AppColor.DEFAULT_BLACK : AppColor.DEFAULT_WHITE;
-    final Color navBarBorderColor = isDarkMode() ? AppColor.DEFAULT_WHITE : AppColor.DEFAULT_BLACK;
 
     return TweenAnimationBuilder(
       tween: Tween<double>(
@@ -52,24 +60,22 @@ class _MainPageState extends BaseStatePage<MainPage> {
         return Transform.translate(
           offset: Offset(0, value),
           child: Container(
-            padding: const EdgeInsets.symmetric(vertical: 17),
+            padding: const EdgeInsets.symmetric(vertical: 12.5),
             decoration: BoxDecoration(
               color: navBarBackgroundColor.withOpacity(0.9),
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(20),
-                topRight: Radius.circular(20),
-              ),
-              border: Border.all(
-                color: navBarBorderColor,
-                width: 2,
+              border: const Border(
+                top: BorderSide(
+                  color: AppColor.DEFAULT_GREY,
+                  width: 2,
+                ),
               ),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                navBarButton(0, Icons.storefront_outlined, "Store", _mainController.isSelected_0),
-                navBarButton(1, Icons.shopping_cart_outlined, "My cart", _mainController.isSelected_1),
-                navBarButton(2, Icons.account_circle_outlined, "Account", _mainController.isSelected_2),
+                navBarButton(0, Icons.storefront_outlined, "Store", MainController.isSelected_0),
+                navBarButton(1, Icons.shopping_cart_outlined, "My cart", MainController.isSelected_1),
+                navBarButton(2, Icons.account_circle_outlined, "Account", MainController.isSelected_2),
               ],
             ),
           ),
@@ -94,7 +100,7 @@ class _MainPageState extends BaseStatePage<MainPage> {
         color: iconColor,
       ),
       onTap: () {
-        _mainController.onNavigate(position);
+        MainController.onNavigate(position);
       },
       label: label,
       labelStyle: TextStyle(
